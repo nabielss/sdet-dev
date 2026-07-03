@@ -29,6 +29,7 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
         env:
+          SAUCE_URL: ${{ secrets.SAUCE_URL }}
           SAUCE_STANDARD_USER: ${{ secrets.SAUCE_STANDARD_USER }}
           SAUCE_LOCKED_USER: ${{ secrets.SAUCE_LOCKED_USER }}
           SAUCE_PROBLEM_USER: ${{ secrets.SAUCE_PROBLEM_USER }}
