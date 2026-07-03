@@ -27,7 +27,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
-        run: npx playwright test
+        run: npx playwright test --reporter=list,html
         env:
           SAUCE_URL: ${{ secrets.SAUCE_URL }}
           SAUCE_STANDARD_USER: ${{ secrets.SAUCE_STANDARD_USER }}
