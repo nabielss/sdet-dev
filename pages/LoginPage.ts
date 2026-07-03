@@ -16,8 +16,7 @@ export class LoginPage {
   }
 
   async goto() {
-    const baseUrl = process.env.SAUCE_URL!;
-    await this.page.goto(baseUrl);
+    await this.page.goto('/');
   }
 
   async login(username: string, password: string) {

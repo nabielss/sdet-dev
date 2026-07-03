@@ -10,4 +10,11 @@ export const validShippingInfo: ShippingInfo = {
   postalCode: "12345",
 };
 
-export const sampleProduct = "Sauce Labs Backpack";
+export const products = {
+  backpack: "Sauce Labs Backpack",
+  bikeLight: "Sauce Labs Bike Light",
+  boltTShirt: "Sauce Labs Bolt T-Shirt",
+  fleeceJacket: "Sauce Labs Fleece Jacket",
+  onesie: "Sauce Labs Onesie",
+  testAllTheThings: "Test.allTheThings() T-Shirt (Red)",
+} as const;

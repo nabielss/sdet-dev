@@ -1,4 +1,4 @@
-import { Page, Locator } from "@playwright/test";
+import { Page, Locator, expect } from "@playwright/test";
 
 export type SortOption = "az" | "za" | "lohi" | "hilo";
 
@@ -54,5 +54,21 @@ export class InventoryPage {
   async getAllProductPrices(): Promise<number[]> {
     const texts = await this.itemPrices.allTextContents();
     return texts.map((t) => parseFloat(t.replace("$", "")));
+  }
+
+  async assertSortedByName(order: "asc" | "desc") {
+    const names = await this.getAllProductNames();
+    const sorted = [...names].sort((a, b) =>
+      order === "asc" ? a.localeCompare(b) : b.localeCompare(a),
+    );
+    expect(names).toEqual(sorted);
+  }
+
+  async assertSortedByPrice(order: "asc" | "desc") {
+    const prices = await this.getAllProductPrices();
+    const sorted = [...prices].sort((a, b) =>
+      order === "asc" ? a - b : b - a,
+    );
+    expect(prices).toEqual(sorted);
   }
 }
