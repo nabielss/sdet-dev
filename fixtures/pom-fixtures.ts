@@ -1,18 +1,21 @@
-import { test as base } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
-import { InventoryPage } from '../pages/InventoryPage';
-import { CartPage } from '../pages/CartPage';
-import { CheckoutPage } from '../pages/CheckoutPage';
-import { MenuComponent } from '../pages/components/MenuComponent';
-import { users } from './users';
+import { test as base } from "@playwright/test";
+import { LoginPage } from "../pages/LoginPage";
+import { InventoryPage } from "../pages/InventoryPage";
+import { CartPage } from "../pages/CartPage";
+import { CheckoutPage } from "../pages/CheckoutPage";
+import { ProductDetailPage } from "../pages/ProductDetailPage";
+import { MenuComponent } from "../pages/components/MenuComponent";
+import { users } from "./users";
 
 type PomFixtures = {
   loginPage: LoginPage;
   inventoryPage: InventoryPage;
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
+  productDetailPage: ProductDetailPage;
   menu: MenuComponent;
   loggedInPage: InventoryPage; // page object already past login, ready to use
+  cartWithItems: { inventoryPage: InventoryPage; cartPage: CartPage };
 };
 
 export const test = base.extend<PomFixtures>({
@@ -31,6 +34,10 @@ export const test = base.extend<PomFixtures>({
 
   checkoutPage: async ({ page }, use) => {
     await use(new CheckoutPage(page));
+  },
+
+  productDetailPage: async ({ page }, use) => {
+    await use(new ProductDetailPage(page));
   },
 
   menu: async ({ page }, use) => {
@@ -59,6 +66,25 @@ export const test = base.extend<PomFixtures>({
       await menu.resetAppState();
     }
   },
+
+  // Composite fixture: logs in standard user, adds 2 items to cart, provides both pages
+  cartWithItems: async ({ page }, use) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto();
+    await loginPage.login(users.standard.username, users.standard.password);
+
+    const inventoryPage = new InventoryPage(page);
+    await inventoryPage.addProductToCart("Sauce Labs Backpack");
+    await inventoryPage.addProductToCart("Sauce Labs Bike Light");
+
+    const cartPage = new CartPage(page);
+    await use({ inventoryPage, cartPage });
+
+    const menu = new MenuComponent(page);
+    if (await menu.menuButton.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await menu.resetAppState();
+    }
+  },
 });
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";
