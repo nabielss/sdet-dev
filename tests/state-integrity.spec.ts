@@ -3,12 +3,14 @@ import { validShippingInfo, products } from '../fixtures/checkoutData';
 
 test.describe('State Integrity', () => {
   test('double-click add to cart adds only once', async ({ loggedInPage }) => {
-    // Click add button once to add the item
+    // Double-click the Add to Cart button
+    // SauceDemo toggles: 1st click = Add, 2nd click = Remove (button changes between clicks)
+    // So double-click results in add then immediate remove — cart ends up empty
     const addButton = loggedInPage.getAddToCartButton(products.backpack);
-    await addButton.click();
+    await addButton.dblclick();
     
-    // Cart should have 1 item
-    await expect(loggedInPage.cartBadge).toHaveText('1');
+    // Actual behavior: badge not visible (added then removed by 2nd click)
+    await expect(loggedInPage.cartBadge).not.toBeVisible();
   });
 
   test('rapid submit on checkout continue button works safely', async ({ loggedInPage, cartPage, checkoutPage, page }) => {

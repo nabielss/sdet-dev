@@ -109,4 +109,21 @@ test.describe('Cart', () => {
     const itemCount = await cartPage.getCartItemCount();
     expect(itemCount).toBe(3);
   });
+
+  // TC0030: Checkout with empty cart
+  test('checkout with empty cart — documents actual app behavior', async ({ loggedInPage, cartPage, page }) => {
+    // Go directly to cart without adding any items
+    await loggedInPage.goToCart();
+    await expect(page).toHaveURL(/cart.html/);
+
+    // Verify cart is empty
+    const itemCount = await cartPage.getCartItemCount();
+    expect(itemCount).toBe(0);
+
+    // Click checkout — SauceDemo allows proceeding with an empty cart
+    await cartPage.proceedToCheckout();
+
+    // Document actual behavior: app proceeds to step one regardless
+    await expect(page).toHaveURL(/checkout-step-one.html/);
+  });
 });

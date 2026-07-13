@@ -25,16 +25,18 @@ test.describe('Navigation & Menu', () => {
     await expect(menu.closeButton).not.toBeVisible();
   });
 
-  test.skip('reset app state clears cart badge', async ({ loggedInPage, menu }) => {
+  test('reset app state clears cart badge', async ({ loggedInPage, menu }) => {
     // Add items to cart
     await loggedInPage.addProductToCart('Sauce Labs Backpack');
     await loggedInPage.addProductToCart('Sauce Labs Bike Light');
     await expect(loggedInPage.cartBadge).toBeVisible();
     await expect(loggedInPage.cartBadge).toHaveText('2');
     
-    // Reset app state via menu
+    // Open menu and wait for reset link to be visible before clicking
     await menu.open();
-    await menu.resetAppState();
+    await menu.resetLink.waitFor({ state: 'visible' });
+    await menu.resetLink.click();
+    await menu.close();
     
     // Cart badge should be gone
     await expect(loggedInPage.cartBadge).not.toBeVisible();
