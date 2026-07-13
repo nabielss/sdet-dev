@@ -83,7 +83,9 @@ export class InventoryPage {
     const productCard = this.page.locator(".inventory_item", {
       hasText: productName,
     });
-    return (await productCard.locator(".inventory_item_price").textContent()) ?? "";
+    return (
+      (await productCard.locator(".inventory_item_price").textContent()) ?? ""
+    );
   }
 
   async cartBadgeVisible(): Promise<boolean> {

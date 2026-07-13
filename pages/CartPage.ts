@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator } from "@playwright/test";
 
 export class CartPage {
   readonly page: Page;
@@ -10,11 +10,11 @@ export class CartPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.checkoutButton = page.getByTestId('checkout');
-    this.cartItems = page.locator('.cart_item');
-    this.cartItemNames = page.locator('.inventory_item_name');
-    this.cartItemPrices = page.locator('.inventory_item_price');
-    this.continueShoppingButton = page.getByTestId('continue-shopping');
+    this.checkoutButton = page.getByTestId("checkout");
+    this.cartItems = page.locator(".cart_item");
+    this.cartItemNames = page.locator(".inventory_item_name");
+    this.cartItemPrices = page.locator(".inventory_item_price");
+    this.continueShoppingButton = page.getByTestId("continue-shopping");
   }
 
   async proceedToCheckout() {
@@ -30,13 +30,13 @@ export class CartPage {
   }
 
   async removeItem(productName: string) {
-    const item = this.page.locator('.cart_item', { hasText: productName });
-    await item.getByRole('button', { name: 'Remove' }).click();
+    const item = this.page.locator(".cart_item", { hasText: productName });
+    await item.getByRole("button", { name: "Remove" }).click();
   }
 
   async getItemPrice(productName: string): Promise<string> {
-    const item = this.page.locator('.cart_item', { hasText: productName });
-    return (await item.locator('.inventory_item_price').textContent()) ?? '';
+    const item = this.page.locator(".cart_item", { hasText: productName });
+    return (await item.locator(".inventory_item_price").textContent()) ?? "";
   }
 
   async continueShoppingClick() {
