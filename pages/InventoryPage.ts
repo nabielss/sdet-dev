@@ -71,4 +71,36 @@ export class InventoryPage {
     );
     expect(prices).toEqual(sorted);
   }
+
+  async clickProductName(productName: string) {
+    const productCard = this.page.locator(".inventory_item", {
+      hasText: productName,
+    });
+    await productCard.locator(".inventory_item_name").click();
+  }
+
+  async getProductPrice(productName: string): Promise<string> {
+    const productCard = this.page.locator(".inventory_item", {
+      hasText: productName,
+    });
+    return (await productCard.locator(".inventory_item_price").textContent()) ?? "";
+  }
+
+  async cartBadgeVisible(): Promise<boolean> {
+    return this.cartBadge.isVisible();
+  }
+
+  getAddToCartButton(productName: string): Locator {
+    const productCard = this.page.locator(".inventory_item", {
+      hasText: productName,
+    });
+    return productCard.getByRole("button", { name: "Add to cart" });
+  }
+
+  getRemoveButton(productName: string): Locator {
+    const productCard = this.page.locator(".inventory_item", {
+      hasText: productName,
+    });
+    return productCard.getByRole("button", { name: "Remove" });
+  }
 }
